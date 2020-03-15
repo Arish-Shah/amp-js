@@ -17,7 +17,7 @@ const handleInput = event => {
 };
 
 const Template = data => html`
-  <input type="text" .value=${data.message} @input=${handleInput} />
+  <input type="text" value=${data.message} @input=${handleInput} />
   <button @click=${handleClick}>Clicks: ${data.count}</button>
   <h1>Hello ${data.message || 'Stranger'}!</h1>
 `;
