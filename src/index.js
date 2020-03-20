@@ -3,17 +3,19 @@ import { html } from './lib/html.js';
 
 export default {
   /**
-   * Lets you create your own custom tags
+   * Lets you create your own custom reusable element
    *
    *
    * @param {string} name
-   *   Name of the component to be used in HTML.
+   *   Name of the component
    * @param {Object} configuration
+   *   Configuration of the component
    * @param {Object=} configuration.data
    * @param {Object=} configuration.methods
    * @param {Array<string>=} configuration.props
+   *   Props passed to the component
    * @param {TemplateResult} configuration.template
-   *   Configuration of the component
+   *   Component template
    */
   component(name, { data, methods, props, template }) {
     if (name.indexOf('<') > -1 || name.indexOf('>') > -1) {
