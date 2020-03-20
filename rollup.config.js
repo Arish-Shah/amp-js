@@ -1,17 +1,11 @@
-import { terser } from 'rollup-plugin-terser';
 import babel from 'rollup-plugin-babel';
 
 export default {
   input: 'src/amp.js',
   output: [
     {
-      file: 'dist/amp.js',
+      file: 'amp.bundled.js',
       format: 'esm'
-    },
-    {
-      file: 'dist/amp.min.js',
-      format: 'esm',
-      plugins: [terser()]
     }
   ],
   plugins: [

@@ -6,7 +6,6 @@
   "module": "dist/amp.js",
   "source": "src/amp.js",
   "scripts": {
-    "prebuild": "rm -rf dist",
     "build": "rollup -c"
   },
   "repository": {
@@ -28,8 +27,7 @@
     "@babel/preset-env": "^7.8.7",
     "eslint": "^6.8.0",
     "rollup": "^2.0.6",
-    "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-terser": "^5.3.0"
+    "rollup-plugin-babel": "^4.4.0"
   },
   "files": [
     "dist/*"
