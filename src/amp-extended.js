@@ -1,4 +1,4 @@
-import { render } from './amp.js';
+import { html, render } from './amp.js';
 
 export default {
   component(name, { data, methods, props, template }) {
@@ -72,3 +72,5 @@ export default {
     });
   }
 };
+
+export { html };
