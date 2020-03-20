@@ -72,7 +72,7 @@ These interpreted values can in turn be any kind of object that amp-js can rende
 
 ### Function `component`
 
-The `component` can be used to create custom reusable components. It is provided with the default export.
+The `component` function can be used to create custom reusable components. It is provided with the default export.
 
 - Each component has a first argument `name`, which helps amp-js locate its usage.
 - The second parameter is a configuration object that contains an optional dynamic data object, methods to mutate them, props passed to the component, and the template itself. amp-js automatically binds `this` to the data, so they can be effectively changed causing a rerender.
