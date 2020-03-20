@@ -70,7 +70,7 @@ These interpreted values can in turn be any kind of object that amp-js can rende
 
 ## Extended Usage
 
-### component
+### Function `component`
 
 The `component` can be used to create custom reusable components. It is provided with the default export.
 
@@ -115,8 +115,8 @@ Amp.component('app-counter', {
   },
   props: ['start', 'step'],
   template: data => html`
-    <h1>${data.count}</h1>
     <button @click=${data.decrement}>Decrement</button>
+    <h1>${data.count}</h1>
     <button @click=${data.increment}>Increment</button>
   `
 });
@@ -125,10 +125,10 @@ Amp.component('app-counter', {
 We can now create multiple `app-counter` component in our HTML, passing `start` and `step` as props:
 
 ```html
-<!-- Starts counter with 5 and increment/decrements by 5 -->
+<!-- Starts counter with 5 and increments/decrements by 5 -->
 <app-counter start="5" step="5"></app-counter>
 
-<!-- Starts counter with 8 and increment/decrements by 3 -->
+<!-- Starts counter with 8 and increments/decrements by 3 -->
 <app-counter start="8" step="3"></app-counter>
 ```
 
