@@ -1,36 +1,97 @@
-import { TemplateResult } from './lib/templates.js';
-import { NodePart } from './lib/parts.js';
+import { render } from './lib/render.js';
+import { html } from './lib/html.js';
 
-// A lookup map for NodeParts that represent the content of a render target
-const nodeParts = new WeakMap();
+export default {
+  /**
+   * Lets you create your own custom tags
+   *
+   *
+   * @param {string} name
+   *   Name of the component to be used in HTML.
+   * @param {Object} configuration
+   * @param {Object=} configuration.data
+   * @param {Object=} configuration.methods
+   * @param {Array<string>=} configuration.props
+   * @param {TemplateResult} configuration.template
+   *   Configuration of the component
+   */
+  component(name, { data, methods, props, template }) {
+    if (name.indexOf('<') > -1 || name.indexOf('>') > -1) {
+      throw new Error('Do not use < or > while declaring component');
+    }
 
-/**
- * Tagging function to tag JavaScript template string literals as HTML
- *
- * @return {TemplateResult}
- *   The strings and values of the template string wrapped in a TemplateResult object
- */
-export const html = (strings, ...values) => {
-  return new TemplateResult(strings, values);
-};
+    const nodes = document.querySelectorAll(name);
+    if (!nodes.length) {
+      throw new Error(`<${name}> was not found.`);
+    }
+    nodes.forEach(node => {
+      let state = {};
 
-/**
- * Render content into a target node
- *
- * @param {any} content
- *   Any content you wish to render. Usually a template string literal tagged with the `html` function
- * @param {Node} target
- *   An HTML Node that you wish to render the content into.
- *   The content will become the sole content of the target node.
- */
-export const render = (content, target) => {
-  // Check if the target has a NodePart that represents its content
-  let part = nodeParts.get(target);
-  if (!part) {
-    // If it does not, create a new NodePart
-    part = new NodePart({ parent: target });
-    nodeParts.set(target, part);
+      if (data) {
+        state = { ...JSON.parse(JSON.stringify(data)) };
+      }
+
+      if (methods) {
+        state = { ...state, ...methods };
+      }
+      // Create a copy of data for each element
+      // Component LifeCycle Methods
+      const lifeCycle = {
+        onMount: null,
+        onUpdate: null
+      };
+
+      if (JSON.stringify(state) !== '{}') {
+        // Proxying the 'data' members
+        Object.keys(state).forEach(key => {
+          if (typeof state[key] === 'function') {
+            state[key] = state[key].bind(state);
+
+            if (key === 'onmount') {
+              lifeCycle.onMount = state[key];
+            }
+            if (key === 'onupdate') {
+              lifeCycle.onUpdate = state[key];
+            }
+          } else {
+            let internalValue = state[key];
+            Object.defineProperty(state, key, {
+              get() {
+                return internalValue;
+              },
+              set(newValue) {
+                internalValue = newValue;
+                render(template(state), node);
+                // Calling update for every subsequent render
+                if (lifeCycle.onUpdate) {
+                  lifeCycle.onUpdate();
+                }
+              }
+            });
+          }
+        });
+      }
+      // Handling the props passed by the component and then removing them
+      if (props && props.length) {
+        state.props = {};
+        const attributes = Array.from(node.attributes);
+        attributes.forEach(attr => {
+          if (props.indexOf(attr.name) > -1) {
+            state.props[attr.name] = attr.value;
+            node.removeAttribute(attr.name);
+          }
+        });
+        if (JSON.stringify(state.props) === '{}') {
+          delete state.props;
+        }
+      }
+      render(template(state), node);
+      // Calling onmount
+      if (lifeCycle.onMount) {
+        lifeCycle.onMount();
+      }
+    });
   }
-  // Task the NodePart of this target to render the content
-  part.render(content);
 };
+
+export { render, html };
