@@ -184,7 +184,7 @@ const template = () => html`
 ## Installation
 
 ```
-$ npm install --save amp-js
+$ npm install @arish-shah/amp
 ```
 
 ## License

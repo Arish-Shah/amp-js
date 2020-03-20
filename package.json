@@ -1,5 +1,5 @@
 {
-  "name": "amp-js",
+  "name": "@arish-shah/amp",
   "version": "1.0.0",
   "description": "A virtual DOM alternative HTML Templating library",
   "main": "amp.js",
