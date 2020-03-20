@@ -2,9 +2,9 @@
   "name": "amp-js",
   "version": "1.0.0",
   "description": "A virtual DOM alternative HTML Templating library",
-  "main": "dist/amp.js",
-  "module": "dist/amp.js",
-  "source": "src/amp.js",
+  "main": "amp.js",
+  "module": "amp.js",
+  "source": "src/index.js",
   "scripts": {
     "build": "rollup -c"
   },
@@ -30,6 +30,6 @@
     "rollup-plugin-babel": "^4.4.0"
   },
   "files": [
-    "dist/*"
+    "amp.js"
   ]
 }

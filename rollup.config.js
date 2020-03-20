@@ -1,11 +1,12 @@
 import babel from 'rollup-plugin-babel';
 
 export default {
-  input: 'src/amp.js',
+  input: 'src/index.js',
   output: [
     {
-      file: 'amp.bundled.js',
-      format: 'esm'
+      file: 'amp.js',
+      format: 'esm',
+      sourcemap: true
     }
   ],
   plugins: [

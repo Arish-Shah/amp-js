@@ -1,5 +1,6 @@
 node_modules/
-*.bundled.js
+amp.js
+amp.js.map
 package.json
 package-lock.json
 yarn.lock
