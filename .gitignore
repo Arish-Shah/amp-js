@@ -1,2 +1,5 @@
 node_modules/
-*.bundled.js
+
+# bundled files
+amp.js
+amp.js.map
