@@ -31,11 +31,9 @@ render(helloTemplate('Ben'), document.body);
 render(helloTemplate('Rey'), document.body);
 ```
 
-## API
+## Core API
 
-The core API consists of two components.
-
-### render(\<any>, Node)
+### Function `render(<any>, Node)`
 
 The `render` function will render any type of object into the content of an HTML `Node`, usually the document body, a container element, or a shadowRoot.
 
@@ -50,7 +48,7 @@ Any other object is coerced to a String before being rendered.
 
 The second argument is the `Node` that the object will be rendered into. The previous content of the `Node` will be removed.
 
-### html
+### Function `html`
 
 The `html` is a [JavaScript template tag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates) that allows creation of flexible templates which will be interpreted as HTML. To use the tag, prepend it to any [JavaScript template literal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals).
 
@@ -69,6 +67,70 @@ const template = name => html`
 ```
 
 These interpreted values can in turn be any kind of object that amp-js can render, including nested templates and arrays.
+
+## Extended Usage
+
+### component
+
+The `component` can be used to create custom reusable components. It is provided with the default export.
+
+- Each component has a first argument `name`, which helps amp-js locate its usage.
+- The second parameter is a configuration object that contains an optional dynamic data object, methods to mutate them, props passed to the component, and the template itself. amp-js automatically binds `this` to the data, so they can be effectively changed causing a rerender.
+
+```javascript
+Amp.component('app-hello', {
+  template: html`
+    <h1>Hello World</h1>
+  `
+});
+```
+
+The component can be consumed in HTML as such:
+
+```html
+<app-hello></app-hello>
+```
+
+---
+
+For a more complex component,
+
+```javascript
+Amp.component('app-counter', {
+  data: {
+    count: 0,
+    step: 1
+  },
+  methods: {
+    onmount() {
+      this.count = this.props.start || 0;
+      this.step = this.props.step || 1;
+    },
+    increment() {
+      this.count += this.step;
+    },
+    decrement() {
+      this.count -= this.step;
+    }
+  },
+  props: ['start', 'step'],
+  template: data => html`
+    <h1>${data.count}</h1>
+    <button @click=${data.decrement}>Decrement</button>
+    <button @click=${data.increment}>Increment</button>
+  `
+});
+```
+
+We can now create multiple `app-counter` component in our HTML, passing `start` and `step` as props:
+
+```html
+<!-- Starts counter with 5 and increment/decrements by 5 -->
+<app-counter start="5" step="5"></app-counter>
+
+<!-- Starts counter with 8 and increment/decrements by 3 -->
+<app-counter start="8" step="3"></app-counter>
+```
 
 #### Dynamic attributes
 
@@ -110,46 +172,13 @@ const template = user => html`
 You can attach event handlers by prefixing an attribute name with `@`
 
 ```javascript
-const handleclick = () => {
+const handleClick = () => {
   alert('clicked the button');
 };
 
 const template = () => html`
   <button @click=${handleClick}></button>
 `;
-```
-
-## Extended
-
-`amp-js/extended` enables you to create your own custom reusable components. Rerender is triggered by assigning a new value.
-
-```javascript
-import Amp, { html } from 'amp-js/extended';
-
-Amp.component('app-root', {
-  data: {
-    message: ''
-  },
-  methods: {
-    onmount() {
-      this.message = this.props.message;
-    },
-    change(event) {
-      this.message = event.target.value;
-    }
-  },
-  props: ['message'],
-  template: data => html`
-    <input type="text" value=${data.message} @input=${data.change} />
-    <h1>Hello ${data.message}!</h1>
-  `
-});
-```
-
-The above created component can be used in HTML as such:
-
-```html
-<app-root message="World"></app-root>
 ```
 
 ## Installation
