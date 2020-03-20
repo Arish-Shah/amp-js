@@ -4,7 +4,7 @@
   "description": "A virtual DOM alternative HTML Templating library",
   "main": "dist/amp.js",
   "module": "dist/amp.js",
-  "unpkg": "dist/amp.js",
+  "source": "src/amp.js",
   "scripts": {
     "prebuild": "rm -rf dist",
     "build": "rollup -c"

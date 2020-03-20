@@ -45,7 +45,6 @@ The first argument is the object that will be rendered. It can be one of the fol
 - A string, number, or boolean
 - An HTML DOM Node
 - An Array-like object
-- A Promise
 
 Any other object is coerced to a String before being rendered.
 
@@ -76,16 +75,14 @@ These interpreted values can in turn be any kind of object that amp-js can rende
 The `html` tag can also be used to set attributes on nodes. To set an attribute, assign the value of the attribute with an interpreted value. amp-js requires that you omit the surrounding `"` when setting attributes.
 
 ```javascript
-const template = source =>
-  html`
-    <img src=${source} />
-  `;
+const template = source => html`
+  <img src=${source} />
+`;
 
 // Composite attribute
-const template = classString =>
-  html`
-    <div class=${`red ${classString}`}></div>
-  `;
+const template = classString => html`
+  <div class=${`red ${classString}`}></div>
+`;
 ```
 
 #### Boolean attributes
@@ -93,10 +90,9 @@ const template = classString =>
 You can set boolean attributes by prefixing the attribute name with `?`
 
 ```javascript
-const template = secret =>
-  html`
-    <p ?hidden=${secret}></p>
-  `;
+const template = secret => html`
+  <p ?hidden=${secret}></p>
+`;
 ```
 
 #### Properties
@@ -104,10 +100,9 @@ const template = secret =>
 You can set properties on elements by prefixing an attribute name with `.`
 
 ```javascript
-const template = user =>
-  html`
-    <user-panel .user=${user}></user-panel>
-  `;
+const template = user => html`
+  <user-panel .user=${user}></user-panel>
+`;
 ```
 
 #### Event handlers
@@ -118,15 +113,15 @@ You can attach event handlers by prefixing an attribute name with `@`
 const handleclick = () => {
   alert('clicked the button');
 };
-const template = () =>
-  html`
-    <button @click=${handleClick}></button>
-  `;
+
+const template = () => html`
+  <button @click=${handleClick}></button>
+`;
 ```
 
 ## Extended
 
-`amp-js/extended` enables you to create your own custom reusable components. Rerender is triggered by assigning (`=`) a new value.
+`amp-js/extended` enables you to create your own custom reusable components. Rerender is triggered by assigning a new value.
 
 ```javascript
 import Amp, { html } from 'amp-js/extended';
@@ -145,10 +140,16 @@ Amp.component('app-root', {
   },
   props: ['message'],
   template: data => html`
-    <input type="text" .value=${data.message} @input=${data.change} />
+    <input type="text" value=${data.message} @input=${data.change} />
     <h1>Hello ${data.message}!</h1>
   `
 });
+```
+
+The above created component can be used in HTML as such:
+
+```html
+<app-root message="World"></app-root>
 ```
 
 ## Installation
