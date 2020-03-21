@@ -3,8 +3,8 @@
 A virtual DOM alternative to build declarative and reactive UI using template literal tags.
 
 [![GitHub license](https://img.shields.io/github/license/Arish-Shah/amp-js?color=blue)](https://github.com/Arish-Shah/amp-js/blob/master/LICENSE)
-![npm v1.0.0](https://img.shields.io/badge/npm-v1.0.0-brightgreen.svg)
-![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+[![npm v0.2.0](https://img.shields.io/badge/npm-v0.2.0-brightgreen.svg)](https://www.npmjs.com/package/@arish-shah/amp)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Arish-Shah/amp-js/pulls)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 - **Highly Flexible:** Use expressive JavaScript templates that can render anything to HTML. Set properties and event listeners directly from the template.
