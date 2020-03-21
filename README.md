@@ -17,8 +17,6 @@ A virtual DOM alternative to build declarative and reactive UI using template li
 `amp-js` lets you write HTML templates in JavaScript with template literals.
 
 ```javascript
-import { html, render } from 'amp-js';
-
 // This is an amp template function. It returns an amp template.
 const helloTemplate = name => html`
   <div>Hello ${name}!</div>
@@ -184,7 +182,7 @@ const template = () => html`
 ## Installation
 
 ```
-$ npm install @arish-shah/amp
+$ npm install
 ```
 
 ## License

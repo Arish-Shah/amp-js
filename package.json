@@ -1,6 +1,6 @@
 {
   "name": "@arish-shah/amp",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A virtual DOM alternative HTML Templating library",
   "main": "amp.js",
   "module": "amp.js",
@@ -30,6 +30,7 @@
     "rollup-plugin-babel": "^4.4.0"
   },
   "files": [
-    "amp.js"
+    "amp.js",
+    "amp.js.map"
   ]
 }

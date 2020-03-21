@@ -3,21 +3,19 @@ import { html } from './lib/html.js';
 
 export default {
   /**
-   * Lets you create your own custom reusable element
-   *
-   *
+   * Create custom reusable components for usage in HTML
    * @param {string} name
-   *   Name of the component
-   * @param {Object} configuration
-   *   Configuration of the component
-   * @param {Object=} configuration.data
-   * @param {Object=} configuration.methods
-   * @param {Array<string>=} configuration.props
-   *   Props passed to the component
-   * @param {TemplateResult} configuration.template
-   *   Component template
+   *   Name of the component. Best practice is to use follow web components standard and use kebab-case
+   * @param {Object} config
+   *   Configuration of the component. This includes template, data, methods and props (if any)
+   * @param {Object=} config.data
+   * @param {Object=} config.methods
+   * @param {Array<string>=} config.props
+   * @param {TemplateResult} config.template
    */
-  component(name, { data, methods, props, template }) {
+  component(name, config) {
+    const { data, methods, props, template } = config;
+
     if (name.indexOf('<') > -1 || name.indexOf('>') > -1) {
       throw new Error('Do not use < or > while declaring component');
     }
