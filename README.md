@@ -96,6 +96,8 @@ The component can be consumed in HTML as such:
 For a more complex component,
 
 ```javascript
+import Amp, { html } from 'https://unpkg.com/@arish-shah/amp';
+
 Amp.component('app-counter', {
   data: {
     count: 0,
@@ -103,21 +105,23 @@ Amp.component('app-counter', {
   },
   methods: {
     onmount() {
-      this.count = this.props.start || 0;
-      this.step = this.props.step || 1;
-    },
-    increment() {
-      this.count += this.step;
+      this.count = Number(this.props.start) || 0;
+      this.step = Number(this.props.step) || 1;
     },
     decrement() {
       this.count -= this.step;
+    },
+    increment() {
+      this.count += this.step;
     }
   },
   props: ['start', 'step'],
   template: data => html`
-    <button @click=${data.decrement}>Decrement</button>
-    <h1>${data.count}</h1>
-    <button @click=${data.increment}>Increment</button>
+    <div class="counter">
+      <button @click=${data.decrement}>Decrement</button>
+      <span>${data.count}</span>
+      <button @click=${data.increment}>Increment</button>
+    </div>
   `
 });
 ```
@@ -183,8 +187,20 @@ const template = () => html`
 
 ## Installation
 
+### npm
+
+amp-js is distributed on npm, in the [`@arish-shah/amp` package](https://www.npmjs.com/package/@arish-shah/amp).
+
 ```
 $ npm install @arish-shah/amp
+```
+
+### <span>unpkg</span>.com
+
+You can also load amp-js directly from the unpkg.com CDN:
+
+```javascript
+import Amp, { html, render } from 'https://unpkg.com/@arish-shah/amp';
 ```
 
 ## License

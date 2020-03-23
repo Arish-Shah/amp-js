@@ -1,5 +1,9 @@
+# Folders
 node_modules/
+
+# Files
 amp.js
+amp.min.js
 amp.js.map
 package.json
 package-lock.json

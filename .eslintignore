@@ -5,4 +5,5 @@ yarn.lock
 
 # bundled files
 amp.js
+amp.min.js
 amp.js.map
