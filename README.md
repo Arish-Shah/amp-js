@@ -203,6 +203,16 @@ You can also load amp-js directly from the unpkg.com CDN:
 import Amp, { html, render } from 'https://unpkg.com/@arish-shah/amp';
 ```
 
+Or, you can create an `index.html` file and include amp-js with:
+
+```html
+<!-- development version -->
+<script src="https://unpkg.com/@arish-shah/amp@latest/amp.js"></script>
+
+<!-- production version -->
+<script src="https://unpkg.com/@arish-shah/amp@latest/amp.min.js"></script>
+```
+
 ## License
 
 [MIT License](LICENSE)
