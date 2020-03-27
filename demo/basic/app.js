@@ -1,4 +1,4 @@
-import { html, render } from '../amp.js';
+import { html, render } from '../../amp.js';
 
 const root = document.getElementById('root');
 let data = {
