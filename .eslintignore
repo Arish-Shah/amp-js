@@ -7,3 +7,6 @@ yarn.lock
 amp.js
 amp.min.js
 amp.js.map
+
+#demo files
+demo/

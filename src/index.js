@@ -20,10 +20,19 @@ export default {
       throw new Error('Do not use < or > while declaring component');
     }
 
+    if (!template) {
+      throw new Error('"template" is required for creating components');
+    }
+
+    if (typeof template !== 'function') {
+      throw new Error('"template" should be a function');
+    }
+
     const nodes = document.querySelectorAll(name);
     if (!nodes.length) {
       throw new Error(`<${name}> was not found.`);
     }
+
     nodes.forEach(node => {
       let state = {};
 
