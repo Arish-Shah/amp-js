@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>amp-js / Clock</title>
+  </head>
+  <body>
+    <amp-time></amp-time>
+    <script type="module">
+      import Amp, { html } from 'https://unpkg.com/@arish-shah/amp';
+
+      Amp.component('amp-time', {
+        data: {
+          date: Date()
+        },
+        methods: {
+          onmount() {
+            setInterval(this.dateUpdater, 1000);
+          },
+          dateUpdater() {
+            this.date = Date();
+          }
+        },
+        template: data => html`
+          <h1>${data.date}</h1>
+        `
+      });
+    </script>
+  </body>
+</html>
