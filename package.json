@@ -6,7 +6,8 @@
   "module": "amp.js",
   "source": "src/index.js",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "watch": "rollup -wc"
   },
   "repository": {
     "type": "git",

@@ -14,44 +14,42 @@ export default {
    * @param {TemplateResult} config.template
    */
   component(name, config) {
-    const { data, methods, props, template } = config;
+    if (!name) {
+      throw new Error('Component name not assigned');
+    }
 
+    const { data, methods, props, template } = config;
+    const nodes = document.querySelectorAll(name);
+
+    if (!template) {
+      throw new Error('template is required for creating components');
+    }
     if (name.indexOf('<') > -1 || name.indexOf('>') > -1) {
       throw new Error('Do not use < or > while declaring component');
     }
-
-    if (!template) {
-      throw new Error('"template" is required for creating components');
-    }
-
-    if (typeof template !== 'function') {
-      throw new Error('"template" should be a function');
-    }
-
-    const nodes = document.querySelectorAll(name);
     if (!nodes.length) {
       throw new Error(`<${name}> was not found.`);
     }
 
     nodes.forEach(node => {
-      let state = {};
-
-      if (data) {
-        state = { ...JSON.parse(JSON.stringify(data)) };
-      }
-
-      if (methods) {
-        state = { ...state, ...methods };
-      }
-      // Create a copy of data for each element
       // Component LifeCycle Methods
       const lifeCycle = {
         onMount: null,
         onUpdate: null
       };
 
-      if (JSON.stringify(state) !== '{}') {
-        // Proxying the 'data' members
+      // Create a copy of data for each element
+      let state = {};
+
+      if (data) {
+        state = { ...JSON.parse(JSON.stringify(data)) };
+      }
+      if (methods) {
+        state = { ...state, ...methods };
+      }
+
+      if (state) {
+        // Proxying the "data" members
         Object.keys(state).forEach(key => {
           if (typeof state[key] === 'function') {
             state[key] = state[key].bind(state);
@@ -94,6 +92,7 @@ export default {
           delete state.props;
         }
       }
+
       render(template(state), node);
       // Calling onmount
       if (lifeCycle.onMount) {
