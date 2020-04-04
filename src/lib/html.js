@@ -1,4 +1,4 @@
-import { TemplateResult } from './templates.js';
+import { TemplateResult } from '../template/templates.js';
 
 /**
  * Tagging function to tag JavaScript template string literals as HTML

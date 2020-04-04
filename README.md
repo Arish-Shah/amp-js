@@ -20,9 +20,7 @@ A virtual DOM alternative to build declarative and reactive UI using template li
 import { html, render } from '@arish-shah/amp';
 
 // This is an amp template function. It returns an amp template.
-const helloTemplate = name => html`
-  <div>Hello ${name}!</div>
-`;
+const helloTemplate = (name) => html` <div>Hello ${name}!</div> `;
 
 // This renders <div>Hello Ben!</div> to the document body
 render(helloTemplate('Ben'), document.body);
@@ -53,17 +51,13 @@ The second argument is the `Node` that the object will be rendered into. The pre
 The `html` is a [JavaScript template tag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates) that allows creation of flexible templates which will be interpreted as HTML. To use the tag, prepend it to any [JavaScript template literal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals).
 
 ```javascript
-const template = () => html`
-  <p>Hello World</p>
-`;
+const template = () => html` <p>Hello World</p> `;
 ```
 
 The contents of the template will be parsed as HTML. The flexibility comes from interpreted values that can be inserted into these templates.
 
 ```javascript
-const template = name => html`
-  <p>Hello ${name}!</p>
-`;
+const template = (name) => html` <p>Hello ${name}!</p> `;
 ```
 
 These interpreted values can in turn be any kind of object that amp-js can render, including nested templates and arrays.
@@ -74,21 +68,26 @@ These interpreted values can in turn be any kind of object that amp-js can rende
 
 The `component` function can be used to create custom reusable components. It is provided with the default export.
 
-- Each component has a first argument `name`, which helps amp-js locate its usage.
-- The second parameter is a configuration object that contains an optional dynamic data object, methods to mutate them, props passed to the component, and the template itself. amp-js automatically binds `this` to the data, so they can be effectively changed causing a rerender.
+- Each component has a first argument `id`, which helps amp-js locate its usage.
+- The second parameter is a description object that contains an optional dynamic data object, methods to mutate them, props passed to the component, templates used inside it and the template itself. amp-js automatically binds `this` to the data, so they can be effectively changed causing a rerender.
+- Each component should have a template function which gets called upon component creation.
+- Execution of this function returns another function that can be called repeatedly to efficiently update the content.
+- Changing the data members inside a component causes it to update automatically.
 
 ```javascript
-Amp.component('app-hello', {
-  template: html`
-    <h1>Hello World</h1>
-  `
+const Hello = Amp.component('amp-hello', {
+  template() {
+    return html`<h1>Hello World</h1>`;
+  }
 });
+
+Hello();
 ```
 
 The component can be consumed in HTML as such:
 
 ```html
-<app-hello></app-hello>
+<amp-hello></amp-hello>
 ```
 
 ---
@@ -98,15 +97,15 @@ For a more complex component,
 ```javascript
 import Amp, { html } from 'https://unpkg.com/@arish-shah/amp';
 
-Amp.component('app-counter', {
+const Counter = Amp.component('amp-counter', {
   data: {
     count: 0,
     step: 1
   },
   methods: {
     onmount() {
-      this.count = Number(this.props.start) || 0;
-      this.step = Number(this.props.step) || 1;
+      this.count = +this.attr('start');
+      this.step = +this.attr('step');
     },
     decrement() {
       this.count -= this.step;
@@ -115,15 +114,18 @@ Amp.component('app-counter', {
       this.count += this.step;
     }
   },
-  props: ['start', 'step'],
-  template: data => html`
-    <div class="counter">
-      <button @click=${data.decrement}>Decrement</button>
-      <span>${data.count}</span>
-      <button @click=${data.increment}>Increment</button>
-    </div>
-  `
+  template() {
+    return html`
+      <div class="counter">
+        <button @click=${this.decrement}>Decrement</button>
+        <span>${this.count}</span>
+        <button @click=${this.increment}>Increment</button>
+      </div>
+    `;
+  }
 });
+
+Counter();
 ```
 
 We can now create multiple `app-counter` component in our HTML, passing `start` and `step` as props:
@@ -136,42 +138,38 @@ We can now create multiple `app-counter` component in our HTML, passing `start` 
 <app-counter start="8" step="3"></app-counter>
 ```
 
-#### Dynamic attributes
+## Attributes
+
+#### 1. Dynamic attributes
 
 The `html` tag can also be used to set attributes on nodes. To set an attribute, assign the value of the attribute with an interpreted value. amp-js requires that you omit the surrounding `"` when setting attributes.
 
 ```javascript
-const template = source => html`
-  <img src=${source} />
-`;
+const template = (source) => html` <img src=${source} /> `;
 
 // Composite attribute
-const template = classString => html`
+const template = (classString) => html`
   <div class=${`red ${classString}`}></div>
 `;
 ```
 
-#### Boolean attributes
+#### 2. Boolean attributes
 
 You can set boolean attributes by prefixing the attribute name with `?`
 
 ```javascript
-const template = secret => html`
-  <p ?hidden=${secret}></p>
-`;
+const template = (secret) => html` <p ?hidden=${secret}></p> `;
 ```
 
-#### Properties
+#### 3. Properties
 
 You can set properties on elements by prefixing an attribute name with `.`
 
 ```javascript
-const template = user => html`
-  <user-panel .user=${user}></user-panel>
-`;
+const template = (user) => html` <user-panel .user=${user}></user-panel> `;
 ```
 
-#### Event handlers
+#### 4. Event handlers
 
 You can attach event handlers by prefixing an attribute name with `@`
 
@@ -180,9 +178,7 @@ const handleClick = () => {
   alert('clicked the button');
 };
 
-const template = () => html`
-  <button @click=${handleClick}></button>
-`;
+const template = () => html` <button @click=${handleClick}></button> `;
 ```
 
 ## Installation
@@ -207,10 +203,14 @@ Or, you can create an `index.html` file and include amp-js with:
 
 ```html
 <!-- development version -->
-<script src="https://unpkg.com/@arish-shah/amp@latest/amp.js"></script>
+<script type="module">
+  import Amp, { html, render } from 'https://unpkg.com/@arish-shah/amp@latest/amp.js';
+</script>
 
 <!-- production version -->
-<script src="https://unpkg.com/@arish-shah/amp@latest/amp.min.js"></script>
+<script type="module">
+  import Amp, { html, render } from 'https://unpkg.com/@arish-shah/amp@latest/amp.min.js';
+</script>
 ```
 
 ## License
