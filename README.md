@@ -81,7 +81,7 @@ const Hello = Amp.component('amp-hello', {
   }
 });
 
-Hello();
+Hello.generate();
 ```
 
 The component can be consumed in HTML as such:
@@ -125,7 +125,7 @@ const Counter = Amp.component('amp-counter', {
   }
 });
 
-Counter();
+Counter.generate();
 ```
 
 We can now create multiple `app-counter` component in our HTML, passing `start` and `step` as props:
@@ -204,12 +204,18 @@ Or, you can create an `index.html` file and include amp-js with:
 ```html
 <!-- development version -->
 <script type="module">
-  import Amp, { html, render } from 'https://unpkg.com/@arish-shah/amp@latest/amp.js';
+  import Amp, {
+    html,
+    render
+  } from 'https://unpkg.com/@arish-shah/amp@latest/amp.js';
 </script>
 
 <!-- production version -->
 <script type="module">
-  import Amp, { html, render } from 'https://unpkg.com/@arish-shah/amp@latest/amp.min.js';
+  import Amp, {
+    html,
+    render
+  } from 'https://unpkg.com/@arish-shah/amp@latest/amp.min.js';
 </script>
 ```
 
