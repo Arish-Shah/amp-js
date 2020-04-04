@@ -1,4 +1,4 @@
-import { NodePart } from './parts.js';
+import { NodePart } from '../template/parts.js';
 
 // A lookup map for NodeParts that represent the content of a render target
 const nodeParts = new WeakMap();

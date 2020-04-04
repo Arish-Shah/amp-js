@@ -1,12 +1,12 @@
 import { TemplateResult, TemplateInstance } from './templates.js';
-import { moveNodes } from './dom.js';
-import { isDirective } from './directive.js';
+import { moveNodes } from '../parser/dom.js';
+import { isDirective } from '../parser/directive.js';
 
-export const isSerializable = value =>
+export const isSerializable = (value) =>
   typeof value === 'string' ||
   typeof value === 'number' ||
   typeof value === 'boolean';
-export const isIterable = nonPrimitive =>
+export const isIterable = (nonPrimitive) =>
   Array.isArray(nonPrimitive) || nonPrimitive[Symbol.iterator];
 
 // A flag that signals that no render should happen
@@ -167,7 +167,7 @@ export class NodePart {
     if (this.promise !== promise) {
       this.promise = promise;
       // When the promise resolves, render the result of that promise
-      promise.then(value => {
+      promise.then((value) => {
         // Render the promise result only if the last rendered value was the promise
         if (this.promise === promise) {
           this.promise = undefined;
@@ -210,20 +210,18 @@ export class AttributePart {
   constructor({ node, attribute }) {
     this.node = node;
     switch (attribute[0]) {
-    case '.':
-      this._render = this._renderProperty;
-      break;
-    case '?':
-      this._render = this._render || this._renderBoolean;
-      break;
-    case '@':
-      this._render = this._render || this._renderEvent;
-      this.node.removeAttribute(attribute);
-      this.name = attribute.slice(1);
-      break;
-    default:
-      this._render = this._renderAttribute;
-      this.name = attribute;
+      case '.':
+        this._render = this._renderProperty;
+      case '?':
+        this._render = this._render || this._renderBoolean;
+      case '@':
+        this._render = this._render || this._renderEvent;
+        this.node.removeAttribute(attribute);
+        this.name = attribute.slice(1);
+        break;
+      default:
+        this._render = this._renderAttribute;
+        this.name = attribute;
     }
   }
 

@@ -1,5 +1,5 @@
-import { findParts } from './node-walker.js';
-import { buildTemplate } from './template-parser.js';
+import { findParts } from '../parser/node-walker.js';
+import { buildTemplate } from '../parser/template-parser.js';
 import { NodePart } from './parts.js';
 /**
  * A map that contains all the template literals we have seen before
@@ -78,9 +78,9 @@ export class TemplateInstance {
     this.fragment = template.element.content.cloneNode(true);
 
     // Create new Parts based on the part definitions set on the Template
-    const parts = this.template.parts.map(part => {
+    const parts = this.template.parts.map((part) => {
       let node = this.fragment;
-      part.path.forEach(nodeIndex => {
+      part.path.forEach((nodeIndex) => {
         node = node.childNodes[nodeIndex];
       });
       part.node = node;
@@ -95,7 +95,7 @@ export class TemplateInstance {
       }
       return part;
     });
-    this.parts = parts.map(part => new part.type(part));
+    this.parts = parts.map((part) => new part.type(part));
   }
 
   /**
