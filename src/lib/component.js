@@ -17,79 +17,77 @@ import {
  *   This includes template, data, methods and props (if any)
  * @param {Object=} definition.data
  * @param {Object=} definition.methods
- * @param {Object=} definition.components
+ * @param {Array<Component>=} definition.components
  * @param {Array<string>=} definition.props
  * @param {TemplateResult} definition.template
+ * @returns {{id, Function}}
+ *   id of the components alongwith a function to generate it
  */
 export const component = (id, definition) => {
-  return () => {
-    validate(id, definition);
-    const { data, methods, props, components, template } = definition;
-    const nodes = getNodes(id);
+  return {
+    id,
+    generate: () => {
+      validate(id, definition);
+      const { data, methods, props, components, template } = definition;
+      const nodes = getNodes(id);
 
-    nodes.forEach((node) => {
-      const lifeCycle = {
-        oncreate: undefined,
-        onmount: undefined,
-        onupdate: undefined
-      };
-      // Create a copy of data for each element
-      let state = createState(data, methods);
-      state.attr = (name) => node.getAttribute(name);
+      nodes.forEach((node) => {
+        const lifeCycle = {
+          oncreate: undefined,
+          onmount: undefined,
+          onupdate: undefined
+        };
+        // Create a copy of data for each element
+        let state = createState(data, methods);
+        state.attr = (name) => node.getAttribute(name);
 
-      const defineReactive = (internalValue, object, name) => {
-        Object.defineProperty(object, name, {
-          get() {
-            return internalValue;
-          },
-          set(newValue) {
-            internalValue = newValue;
-            render(template.call(state), node);
-            updateChildren(components);
-            callLifeCycle(lifeCycle.onupdate);
+        const defineReactive = (internalValue, object, name) => {
+          Object.defineProperty(object, name, {
+            get() {
+              return internalValue;
+            },
+            set(newValue) {
+              internalValue = newValue;
+              render(template.call(state), node);
+              updateChildren(components);
+              callLifeCycle(lifeCycle.onupdate);
+            }
+          });
+        };
+        /*  On re-render update children */
+        const updateChildren = (components) => {
+          if (components && components.length > 0) {
+            components.forEach((comp) => {
+              const isInDOM = document.querySelectorAll(comp.id).length > 0;
+              if (isInDOM) {
+                comp.generate();
+              }
+            });
           }
-        });
-      };
+        };
 
-      /**
-       * On re-render update children
-       */
-      const updateChildren = (components) => {
-        if (components && Object.keys(components).length > 0) {
-          Object.keys(components).forEach((key) => {
-            const isInDOM = document.querySelectorAll(key).length > 0;
-            if (isInDOM) {
-              components[key]();
+        /* Checks through state and proxifies them */
+        if (state) {
+          Object.keys(state).forEach((key) => {
+            if (typeof state[key] === 'function') {
+              state[key] = state[key].bind(state);
+              if (key in lifeCycle) {
+                lifeCycle[key] = state[key];
+              }
+            } else {
+              defineReactive(state[key], state, key);
             }
           });
         }
-      };
 
-      /**
-       * Checks through state and proxifies them
-       */
-      if (state) {
-        Object.keys(state).forEach((key) => {
-          if (typeof state[key] === 'function') {
-            state[key] = state[key].bind(state);
-            if (key in lifeCycle) {
-              lifeCycle[key] = state[key];
-            }
-          } else {
-            defineReactive(state[key], state, key);
-          }
-        });
-      }
+        /* Set the props to state.props variable */
+        state.props = getProps(props, node);
 
-      /**
-       * Set the props to state.props variable
-       */
-      state.props = getProps(props, node);
-
-      callLifeCycle(lifeCycle.oncreate);
-      render(template.call(state), node);
-      updateChildren(components);
-      callLifeCycle(lifeCycle.onmount);
-    });
+        callLifeCycle(lifeCycle.oncreate);
+        render(template.call(state), node);
+        updateChildren(components);
+        callLifeCycle(lifeCycle.onmount);
+      });
+    }
   };
 };

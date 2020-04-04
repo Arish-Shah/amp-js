@@ -1,3 +1,5 @@
+/* eslint-disable no-fallthrough */
+/* eslint-disable indent */
 import { TemplateResult, TemplateInstance } from './templates.js';
 import { moveNodes } from '../parser/dom.js';
 import { isDirective } from '../parser/directive.js';
@@ -234,6 +236,9 @@ export class AttributePart {
   }
 
   _renderProperty(value) {
+    if (!value) {
+      throw new Error(`undefined cannot be assigned to ".${this.name}"`);
+    }
     this.node[this.name] = value;
   }
 
@@ -247,6 +252,9 @@ export class AttributePart {
   }
 
   _renderEvent(listener) {
+    if (!listener) {
+      throw new Error(`undefined cannot be assigned to "@${this.name}"`);
+    }
     if (this.value !== listener) {
       this.node.removeEventListener(this.name, this.value);
       this.node.addEventListener(this.name, listener);
@@ -255,6 +263,9 @@ export class AttributePart {
   }
 
   _renderAttribute(string) {
+    if (string === undefined) {
+      throw new Error(`undefined cannot be assigned to "${this.name}"`);
+    }
     if (this.value !== string) {
       this.node.setAttribute(this.name, string);
       this.value = string;
