@@ -236,7 +236,7 @@ export class AttributePart {
   }
 
   _renderProperty(value) {
-    if (!value) {
+    if (typeof value === 'undefined') {
       throw new Error(`undefined cannot be assigned to ".${this.name}"`);
     }
     this.node[this.name] = value;
@@ -252,7 +252,7 @@ export class AttributePart {
   }
 
   _renderEvent(listener) {
-    if (!listener) {
+    if (typeof listener === 'undefined') {
       throw new Error(`undefined cannot be assigned to "@${this.name}"`);
     }
     if (this.value !== listener) {
@@ -263,7 +263,7 @@ export class AttributePart {
   }
 
   _renderAttribute(string) {
-    if (string === undefined) {
+    if (typeof string === 'undefined') {
       throw new Error(`undefined cannot be assigned to "${this.name}"`);
     }
     if (this.value !== string) {
