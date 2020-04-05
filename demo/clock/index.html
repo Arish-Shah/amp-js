@@ -10,7 +10,7 @@
     <script type="module">
       import Amp, { html } from '../../amp.js';
 
-      Amp.component('amp-time', {
+      const Time = Amp.component('amp-time', {
         data: {
           date: Date()
         },
@@ -22,10 +22,12 @@
             this.date = Date();
           }
         },
-        template: data => html`
-          <h1>${data.date}</h1>
-        `
+        template() {
+          return html`<h1>${this.date}</h1>`;
+        }
       });
+
+      Time.generate();
     </script>
   </body>
 </html>

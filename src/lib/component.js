@@ -41,19 +41,23 @@ export const component = (id, definition) => {
         let state = createState(data, methods);
         state.attr = (name) => node.getAttribute(name);
 
-        const defineReactive = (internalValue, object, name) => {
-          Object.defineProperty(object, name, {
-            get() {
-              return internalValue;
-            },
-            set(newValue) {
-              internalValue = newValue;
-              render(template.call(state), node);
-              updateChildren(components);
-              callLifeCycle(lifeCycle.onupdate);
+        const proxyHandler = {
+          get: function (target, key) {
+            if (typeof target[key] === 'object' && target[key] !== null) {
+              return new Proxy(target[key], proxyHandler);
+            } else {
+              return target[key];
             }
-          });
+          },
+          set: function (target, key, value) {
+            target[key] = value;
+            render(template.call(state), node);
+            updateChildren(components);
+            callLifeCycle(lifeCycle.onupdate);
+            return true;
+          }
         };
+
         /*  On re-render update children */
         const updateChildren = (components) => {
           if (components && components.length > 0) {
@@ -75,7 +79,7 @@ export const component = (id, definition) => {
                 lifeCycle[key] = state[key];
               }
             } else {
-              defineReactive(state[key], state, key);
+              state = new Proxy(state, proxyHandler);
             }
           });
         }
