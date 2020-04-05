@@ -21,7 +21,7 @@ export const getNodes = (name) => {
   return nodes;
 };
 
-export const createState = (data, methods) => {
+export const createData = (data) => {
   let state = {};
 
   if (data && Object.keys(data).length > 0) {
@@ -30,15 +30,6 @@ export const createState = (data, methods) => {
     }
 
     state = { ...JSON.parse(JSON.stringify(data)) };
-  }
-  if (methods && Object.keys(methods).length > 0) {
-    if (
-      Object.keys(methods).some((name) => typeof methods[name] !== 'function')
-    ) {
-      throw new Error('"methods" property should not contain data');
-    }
-
-    state = { ...state, ...methods };
   }
   return state;
 };

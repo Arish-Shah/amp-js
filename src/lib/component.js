@@ -2,7 +2,7 @@ import { render } from '../lib/render.js';
 import {
   validate,
   getNodes,
-  createState,
+  createData,
   callLifeCycle,
   getProps
 } from '../util/index.js';
@@ -37,9 +37,6 @@ export const component = (id, definition) => {
           onmount: undefined,
           onupdate: undefined
         };
-        // Create a copy of data for each element
-        let state = createState(data, methods);
-        state.attr = (name) => node.getAttribute(name);
 
         const proxyHandler = {
           get: function (target, key) {
@@ -50,10 +47,13 @@ export const component = (id, definition) => {
             }
           },
           set: function (target, key, value) {
+            let flag = key in target;
             target[key] = value;
-            render(template.call(state), node);
-            updateChildren(components);
-            callLifeCycle(lifeCycle.onupdate);
+            if (flag) {
+              render(template.call(state), node);
+              updateChildren(components);
+              callLifeCycle(lifeCycle.onupdate);
+            }
             return true;
           }
         };
@@ -70,18 +70,26 @@ export const component = (id, definition) => {
           }
         };
 
-        /* Checks through state and proxifies them */
-        if (state) {
-          Object.keys(state).forEach((key) => {
-            if (typeof state[key] === 'function') {
-              state[key] = state[key].bind(state);
-              if (key in lifeCycle) {
-                lifeCycle[key] = state[key];
+        // Create a copy of data for each element
+        let state = createData(data);
+        state.attr = (name) => node.getAttribute(name);
+        state = new Proxy(state, proxyHandler);
+
+        /* Go through methods and bind them, add them to state */
+        const mCopy = { ...methods };
+        if (mCopy) {
+          const methodNames = Object.keys(mCopy);
+          if (methodNames.some((name) => typeof mCopy[name] !== 'function')) {
+            throw new Error('"methods" property should not contain data');
+          }
+          if (methodNames.length > 0) {
+            methodNames.forEach((name) => {
+              state[name] = mCopy[name].bind(state);
+              if (name in lifeCycle) {
+                lifeCycle[name] = state[name];
               }
-            } else {
-              state = new Proxy(state, proxyHandler);
-            }
-          });
+            });
+          }
         }
 
         /* Set the props to state.props variable */
