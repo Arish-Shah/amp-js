@@ -212,7 +212,7 @@ export class AttributePart {
   constructor({ node, attribute }) {
     this.node = node;
     switch (attribute[0]) {
-      case '.':
+      case ':':
         this._render = this._renderProperty;
       case '?':
         this._render = this._render || this._renderBoolean;
