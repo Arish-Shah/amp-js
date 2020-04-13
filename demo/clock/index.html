@@ -11,13 +11,13 @@
       import Amp, { html } from '../../amp.js';
 
       const Time = Amp.component('amp-time', {
+        onmount() {
+          setInterval(this.dateUpdater, 1000);
+        },
         data: {
           date: Date()
         },
         methods: {
-          onmount() {
-            setInterval(this.dateUpdater, 1000);
-          },
           dateUpdater() {
             this.date = Date();
           }

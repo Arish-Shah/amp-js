@@ -102,11 +102,11 @@ const Counter = Amp.component('amp-counter', {
     count: 0,
     step: 1
   },
+  onmount() {
+    this.count = +this.attr('start');
+    this.step = +this.attr('step');
+  },
   methods: {
-    onmount() {
-      this.count = +this.attr('start');
-      this.step = +this.attr('step');
-    },
     decrement() {
       this.count -= this.step;
     },
