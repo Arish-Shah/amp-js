@@ -41,7 +41,7 @@ describe('markers', () => {
 
   describe('attributeMarker', () => {
     it('should be a CSS font-family definition', () => {
-      expect(attributeMarker.slice(0, 12) === 'font-family:').toBeTruthy();
+      expect(attributeMarker.slice(0, 12) === 'font-family:').toBe(true);
     });
     it('should contain the random marker', () => {
       expect(attributeMarker.indexOf(marker)).toBeGreaterThan(0);

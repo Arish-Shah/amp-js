@@ -11,6 +11,8 @@ const html = (strings, ...values) => new TemplateResult(strings, values);
 const fragmentString = (documentFragment) =>
   [].map.call(documentFragment.childNodes, (node) => node.outerHTML).join('');
 
+const replaceWhitespace = (str) => str.replace(/\s+/g, '').trim();
+
 describe('parts', () => {
   describe('isSerializable', () => {
     it('should return a truthy value for strings, numbers, and booleans', () => {
@@ -259,14 +261,13 @@ describe('parts', () => {
             templateResult.template
           );
           expect(fragmentString(templateInstance.fragment)).toEqual('');
-          console.log(parent.outerHTML);
-          expect(parent.outerHTML).toBe(
+          expect(replaceWhitespace(parent.outerHTML)).toBe(
             '<div><span></span><ul><li></li></ul><span></span></div>'
           );
           part.clear();
-          expect(fragmentString(templateInstance.fragment)).toEqual(
-            '<ul><li></li></ul>'
-          );
+          expect(
+            replaceWhitespace(fragmentString(templateInstance.fragment))
+          ).toEqual('<ul><li></li></ul>');
           expect(parent.outerHTML).toEqual(
             '<div><span></span><span></span></div>'
           );
@@ -283,11 +284,13 @@ describe('parts', () => {
             templateResult.template
           );
           expect(fragmentString(templateInstance.fragment)).toEqual('');
-          expect(parent.outerHTML).toEqual('<div><ul><li></li></ul></div>');
-          part.clear();
-          expect(fragmentString(templateInstance.fragment)).toEqual(
-            '<ul><li></li></ul>'
+          expect(replaceWhitespace(parent.outerHTML)).toEqual(
+            '<div><ul><li></li></ul></div>'
           );
+          part.clear();
+          expect(
+            replaceWhitespace(fragmentString(templateInstance.fragment))
+          ).toEqual('<ul><li></li></ul>');
           expect(parent.outerHTML).toEqual('<div></div>');
         }
       });
