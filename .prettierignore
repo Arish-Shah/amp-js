@@ -8,3 +8,6 @@ amp.js.map
 package.json
 package-lock.json
 yarn.lock
+
+# Tests
+__tests__/parser/template-parser.js

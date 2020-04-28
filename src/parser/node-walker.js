@@ -33,7 +33,7 @@ export const findParts = (strings, template) => {
         // There is no way to fix this, so throw an error to alert the developer to fix it
         if (node.hasAttribute(failMarker)) {
           throw new Error(
-            "The '>' character is not allowed in attribute literals. Replace with '&gt;"
+            'The ">" character is not allowed in attribute literals. Replace with "&gt;"'
           );
         }
         // If the node has any AttributeParts, it will have the attributeMarker attribute set
@@ -78,7 +78,7 @@ export const findParts = (strings, template) => {
   // Throw an error and warn the developer
   if (parts.length < strings.length - 1) {
     throw new Error(
-      "Double attribute assignments are not allowed: '<div a=${0} a=${0}>'"
+      'Double attribute assignments are not allowed: "<div a=${0} a=${0}>"'
     );
   }
   return parts;
