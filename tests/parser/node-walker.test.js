@@ -6,7 +6,7 @@ const html = (strings) => strings;
 
 describe('nodeWalker', () => {
   describe('findParts', () => {
-    it('Correctly detects part types', () => {
+    test('Correctly detects part types', () => {
       const strings = html`<!--${0}-->
         <div a=${1}>${2}</div>`;
       const template = buildTemplate(strings);
@@ -17,7 +17,7 @@ describe('nodeWalker', () => {
       expect(parts[2].type).toBe(NodePart);
     });
 
-    it('Returns the correct path for node parts', () => {
+    test('Returns the correct path for node parts', () => {
       const strings = html`<div>
         ${0}
         <div>${0}</div>
@@ -28,7 +28,7 @@ describe('nodeWalker', () => {
       expect(parts[1].path).toEqual([0, 3, 0]);
     });
 
-    it('Considers text nodes in paths', () => {
+    test('Considers text nodes in paths', () => {
       const strings = html`<div>
         ${0}
         <div>${0}</div>
@@ -39,7 +39,7 @@ describe('nodeWalker', () => {
       expect(parts[1].path).toEqual([0, 3, 0]);
     });
 
-    it('Considers comment nodes in paths', () => {
+    test('Considers comment nodes in paths', () => {
       const strings = html`<div>
         <!-- -->${0}<!-- -->
         <div><!-- -->${0}</div>
@@ -50,7 +50,7 @@ describe('nodeWalker', () => {
       expect(parts[1].path).toEqual([0, 5, 1]);
     });
 
-    it('Returns the correct path for attribute parts', () => {
+    test('Returns the correct path for attribute parts', () => {
       const strings = html`<div a=${0}>
         <div></div>
         <div a=${0}></div>
@@ -61,7 +61,7 @@ describe('nodeWalker', () => {
       expect(parts[1].path).toEqual([0, 3]);
     });
 
-    it('Returns the correct path for attribute parts', () => {
+    test('Returns the correct path for attribute parts', () => {
       const strings = html`<div a=${0}>
         <div></div>
         <div a=${0}></div>
@@ -72,7 +72,7 @@ describe('nodeWalker', () => {
       expect(parts[1].path).toEqual([0, 3]);
     });
 
-    it('Preserves original attribute names', () => {
+    test('Preserves original attribute names', () => {
       const strings = html` <div
         a=${0}
         a-b=${1}
@@ -93,7 +93,7 @@ describe('nodeWalker', () => {
       expect(parts[6].attribute).toBe('$a');
     });
 
-    it('Preserves prefixes in the attribute name', () => {
+    test('Preserves prefixes in the attribute name', () => {
       const strings = html` <div .a=${0} ?a=${1} @a=${2}></div>`;
       const template = buildTemplate(strings);
       const parts = findParts(strings, template);
@@ -102,7 +102,7 @@ describe('nodeWalker', () => {
       expect(parts[2].attribute).toBe('@a');
     });
 
-    it('throws an Error when an attribute contains the ">" character', () => {
+    test('throws an Error when an attribute contains the ">" character', () => {
       let strings = html` <div a=">" b=${0}></div>`;
       let template = buildTemplate(strings);
       expect(() => findParts(strings, template)).toThrow();
@@ -112,7 +112,7 @@ describe('nodeWalker', () => {
       expect(() => findParts(strings, template)).toThrow();
     });
 
-    it('throws an Error when attributes are assigned to more than once', () => {
+    test('throws an Error when attributes are assigned to more than once', () => {
       let strings = html` <div a=${0} a=${1}></div>`;
       let template = buildTemplate(strings);
       expect(() => findParts(strings, template)).toThrow();
@@ -128,7 +128,7 @@ describe('nodeWalker', () => {
       expect(() => findParts(strings, template)).not.toThrow();
     });
 
-    it('does not break on the "style" attribute', () => {
+    test('does not break on the "style" attribute', () => {
       {
         const strings = html`<div style=${''}></div>`;
         const template = buildTemplate(strings);

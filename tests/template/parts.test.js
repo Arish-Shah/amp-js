@@ -15,13 +15,13 @@ const replaceWhitespace = (str) => str.replace(/\s+/g, '').trim();
 
 describe('parts', () => {
   describe('isSerializable', () => {
-    it('should return a truthy value for strings, numbers, and booleans', () => {
+    test('should return a truthy value for strings, numbers, and booleans', () => {
       expect(!!isSerializable('')).toBe(true);
       expect(!!isSerializable(0)).toBe(true);
       expect(!!isSerializable(true)).toBe(true);
     });
 
-    it('should return a falsy value for other things', () => {
+    test('should return a falsy value for other things', () => {
       expect(!!isSerializable(null)).toBe(false);
       expect(!!isSerializable(undefined)).toBe(false);
       expect(!!isSerializable(Symbol())).toBe(false);
@@ -34,14 +34,14 @@ describe('parts', () => {
   });
 
   describe('isIterable', () => {
-    it('should return a truthy value for array-like non-primitives', () => {
+    test('should return a truthy value for array-like non-primitives', () => {
       expect(!!isIterable([])).toBe(true);
       expect(!!isIterable(new Map())).toBe(true);
       expect(!!isIterable(new Set())).toBe(true);
       expect(!!isIterable(new Int8Array(0))).toBe(true);
     });
 
-    it('should return a falsy value for non-array-like non-primitives', () => {
+    test('should return a falsy value for non-array-like non-primitives', () => {
       expect(!!isIterable({})).toBe(false);
       expect(!!isIterable(html``)).toBe(false);
       expect(!!isIterable(function () {})).toBe(false);
@@ -51,19 +51,19 @@ describe('parts', () => {
   });
 
   describe('AttributePart', () => {
-    it('remembers the node it belongs to', () => {
+    test('remembers the node it belongs to', () => {
       const node = document.createElement('div');
       let part = new AttributePart({ node, attribute: '' });
       expect(part.node === node).toBe(true);
     });
 
-    it('remembers the attribute name', () => {
+    test('remembers the attribute name', () => {
       const node = document.createElement('div');
       let part = new AttributePart({ node, attribute: 'a' });
       expect(part.name).toEqual('a');
     });
 
-    it('detects ":" "?" and "@" prefixes and sets the name correctly', () => {
+    test('detects ":" "?" and "@" prefixes and sets the name correctly', () => {
       const node = document.createElement('div');
       let part = new AttributePart({ node, attribute: ':a' });
       expect(part.name).toEqual('a');
@@ -73,7 +73,7 @@ describe('parts', () => {
       expect(part.name).toEqual('a');
     });
 
-    it('uses the correct render function', () => {
+    test('uses the correct render function', () => {
       const node = document.createElement('div');
       let part = new AttributePart({ node, attribute: 'a' });
       expect(part._render === part._renderAttribute).toBe(true);
@@ -85,7 +85,7 @@ describe('parts', () => {
       expect(part._render === part._renderEvent).toBe(true);
     });
 
-    it('renders attributes', () => {
+    test('renders attributes', () => {
       const node = document.createElement('div');
       let part = new AttributePart({ node, attribute: 'a' });
       part.render('one');
@@ -94,7 +94,7 @@ describe('parts', () => {
       expect(node.getAttribute('a')).toEqual('two');
     });
 
-    it('renders properties', () => {
+    test('renders properties', () => {
       const node = document.createElement('div');
       let part = new AttributePart({ node, attribute: ':a' });
       part.render('one');
@@ -103,7 +103,7 @@ describe('parts', () => {
       expect(node.a).toEqual('two');
     });
 
-    it('renders booleans', () => {
+    test('renders booleans', () => {
       const node = document.createElement('div');
       let part = new AttributePart({ node, attribute: '?a' });
       part.render(true);
@@ -112,7 +112,7 @@ describe('parts', () => {
       expect(node.hasAttribute('a')).toBe(false);
     });
 
-    it('renders event handlers', () => {
+    test('renders event handlers', () => {
       const node = document.createElement('div');
       let part = new AttributePart({ node, attribute: '@click' });
       let counterOne = 0;
@@ -134,7 +134,7 @@ describe('parts', () => {
       expect(counterTwo).toEqual(1);
     });
 
-    it('clears old event handlers', () => {
+    test('clears old event handlers', () => {
       const node = document.createElement('div');
       let part = new AttributePart({ node, attribute: '@click' });
       let counter = 0;
@@ -149,7 +149,7 @@ describe('parts', () => {
       expect(counter).toEqual(1);
     });
 
-    it('does not remove other event handlers', () => {
+    test('does not remove other event handlers', () => {
       const node = document.createElement('div');
       let part = new AttributePart({ node, attribute: '@click' });
       let counter = 0;
@@ -175,13 +175,13 @@ describe('parts', () => {
   });
 
   describe('CommentPart', () => {
-    it('remembers the node it belongs to', () => {
+    test('remembers the node it belongs to', () => {
       const node = document.createComment('test');
       let part = new CommentPart({ node, attribute: '' });
       expect(part.node === node).toBe(true);
     });
 
-    it('renders comments', () => {
+    test('renders comments', () => {
       const node = document.createComment('test');
       let part = new CommentPart({ node, attribute: '' });
       expect(node.textContent).toEqual('test');
@@ -204,13 +204,13 @@ describe('parts', () => {
       return { node, parent, before, after };
     };
 
-    it('remembers what node it represents', () => {
+    test('remembers what node it represents', () => {
       const { node } = setupNodes();
       const part = new NodePart({ node });
       expect(part.node === node).toBe(true);
     });
 
-    it('knows what the parent node is', () => {
+    test('knows what the parent node is', () => {
       const { node, parent } = setupNodes();
       let part = new NodePart({ parent });
       expect(part.parentNode === parent).toBe(true);
@@ -218,7 +218,7 @@ describe('parts', () => {
       expect(part.parentNode === parent).toBe(true);
     });
 
-    it('reassigns parents for nodes that are DocumentFragment contents', () => {
+    test('reassigns parents for nodes that are DocumentFragment contents', () => {
       const { parent } = setupNodes();
       const fragment = document.createDocumentFragment();
       fragment.appendChild(parent);
@@ -231,7 +231,7 @@ describe('parts', () => {
     });
 
     describe('clear', () => {
-      it('removes nodes that this NodePart represents from the DOM', () => {
+      test('removes nodes that this NodePart represents from the DOM', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -248,7 +248,7 @@ describe('parts', () => {
         }
       });
 
-      it('moves nodes back into the DocumentFragment when clearing after rendering a TemplateResult', () => {
+      test('moves nodes back into the DocumentFragment when clearing after rendering a TemplateResult', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -297,7 +297,7 @@ describe('parts', () => {
     });
 
     describe('_renderText', () => {
-      it('renders strings', () => {
+      test('renders strings', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -320,7 +320,7 @@ describe('parts', () => {
         }
       });
 
-      it('renders numbers as strings', () => {
+      test('renders numbers as strings', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -343,7 +343,7 @@ describe('parts', () => {
         }
       });
 
-      it('renders booleans as strings in the node', () => {
+      test('renders booleans as strings in the node', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -366,7 +366,7 @@ describe('parts', () => {
         }
       });
 
-      it('renders different types in succession', () => {
+      test('renders different types in succession', () => {
         const { node, parent } = setupNodes();
         const part = new NodePart({ node });
         part._renderText('string');
@@ -385,7 +385,7 @@ describe('parts', () => {
     });
 
     describe('_renderNode', () => {
-      it('renders a node', () => {
+      test('renders a node', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -418,7 +418,7 @@ describe('parts', () => {
     });
 
     describe('_renderIterable', () => {
-      it('renders an array of primitives', () => {
+      test('renders an array of primitives', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -437,7 +437,7 @@ describe('parts', () => {
         }
       });
 
-      it('renders an array of different value types', () => {
+      test('renders an array of different value types', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -466,7 +466,7 @@ describe('parts', () => {
         }
       });
 
-      it('renders nested arrays', () => {
+      test('renders nested arrays', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -485,7 +485,7 @@ describe('parts', () => {
         }
       });
 
-      it('correctly handles changes in templates between renders', () => {
+      test('correctly handles changes in templates between renders', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -514,7 +514,7 @@ describe('parts', () => {
         }
       });
 
-      it('correctly renders empty arrays', () => {
+      test('correctly renders empty arrays', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -557,7 +557,7 @@ describe('parts', () => {
         }
       });
 
-      it('renders additions to the array in subsequent renders', () => {
+      test('renders additions to the array in subsequent renders', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -584,7 +584,7 @@ describe('parts', () => {
         }
       });
 
-      it('removes elements when the array shrinks', () => {
+      test('removes elements when the array shrinks', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -611,7 +611,7 @@ describe('parts', () => {
         }
       });
 
-      it('does not break when rendering another thing in between arrays', () => {
+      test('does not break when rendering another thing in between arrays', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -644,7 +644,7 @@ describe('parts', () => {
     });
 
     describe('_renderPromise', () => {
-      it('does nothing until the promise resolves', () => {
+      test('does nothing until the promise resolves', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -665,7 +665,7 @@ describe('parts', () => {
         }
       });
 
-      it('renders a promise that is already resolved', async () => {
+      test('renders a promise that is already resolved', async () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -686,7 +686,7 @@ describe('parts', () => {
         }
       });
 
-      it('renders the promise result once it resolves', async () => {
+      test('renders the promise result once it resolves', async () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -717,7 +717,7 @@ describe('parts', () => {
         }
       });
 
-      it('only renders the last promise', async () => {
+      test('only renders the last promise', async () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -764,7 +764,7 @@ describe('parts', () => {
         }
       });
 
-      it('does not override values rendered after the promise', async () => {
+      test('does not override values rendered after the promise', async () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -795,7 +795,7 @@ describe('parts', () => {
         }
       });
 
-      it('works when rendering another thing in between promises', async () => {
+      test('works when rendering another thing in between promises', async () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -840,7 +840,7 @@ describe('parts', () => {
         }
       });
 
-      it('does not cause additional renders when re-rendering the same promise', async () => {
+      test('does not cause additional renders when re-rendering the same promise', async () => {
         {
           const { node } = setupNodes();
           const part = new NodePart({ node });
@@ -877,7 +877,7 @@ describe('parts', () => {
     });
 
     describe('_renderTemplateResult', () => {
-      it('renders a template', () => {
+      test('renders a template', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -896,7 +896,7 @@ describe('parts', () => {
         }
       });
 
-      it('renders the values inside templates', () => {
+      test('renders the values inside templates', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -915,7 +915,7 @@ describe('parts', () => {
         }
       });
 
-      it('renders nested templates', () => {
+      test('renders nested templates', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -934,7 +934,7 @@ describe('parts', () => {
         }
       });
 
-      it('renders nested templates in the root of the template', () => {
+      test('renders nested templates in the root of the template', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -953,7 +953,7 @@ describe('parts', () => {
         }
       });
 
-      it('can render the same template in different parts', () => {
+      test('can render the same template in different parts', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -979,7 +979,7 @@ describe('parts', () => {
         }
       });
 
-      it('can alternate between templates', () => {
+      test('can alternate between templates', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -1018,7 +1018,7 @@ describe('parts', () => {
         }
       });
 
-      it('caches the template instances', () => {
+      test('caches the template instances', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
@@ -1061,7 +1061,7 @@ describe('parts', () => {
         }
       });
 
-      it('re-uses the template instances but replaces the values', () => {
+      test('re-uses the template instances but replaces the values', () => {
         {
           const { node, parent } = setupNodes();
           const part = new NodePart({ node });
