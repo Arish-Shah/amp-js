@@ -16,7 +16,7 @@ const htmlStrings = (strings) => strings;
 
 describe('templates', () => {
   describe('TemplateResult', () => {
-    it('stores the strings and values', () => {
+    test('stores the strings and values', () => {
       const strings = ['<div>', '</div>'];
       const values = [0];
       const templateResultFromArrays = new TemplateResult(strings, values);
@@ -27,19 +27,19 @@ describe('templates', () => {
       expect(templateResult.values).toEqual(values);
     });
 
-    it('holds a template', () => {
+    test('holds a template', () => {
       const templateResult = html``;
       expect(templateResult.template instanceof Template).toBe(true);
     });
 
-    it('lazily loads the template', () => {
+    test('lazily loads the template', () => {
       const templateResult = html``;
       expect(templateResult._template).toBeUndefined();
       expect(templateResult.template instanceof Template).toBe(true);
       expect(templateResult._template instanceof Template).toBe(true);
     });
 
-    it('returns the same template from different TemplateResults create with the same literal', () => {
+    test('returns the same template from different TemplateResults create with the same literal', () => {
       const template = () => html``;
       const templateResultOne = template();
       const templateResultTwo = template();
@@ -49,19 +49,19 @@ describe('templates', () => {
   });
 
   describe('Template', () => {
-    it('stores the strings that constructed the template', () => {
+    test('stores the strings that constructed the template', () => {
       const strings = htmlStrings`<div>${0}</div>`;
       const template = new Template(strings);
       expect(template.strings).toEqual(strings);
     });
 
-    it('constructs a template element that holds a DOM template', () => {
+    test('constructs a template element that holds a DOM template', () => {
       const strings = htmlStrings`<div>${0}</div>`;
       const template = new Template(strings);
       expect(template.element instanceof HTMLTemplateElement).toBe(true);
     });
 
-    it('computes the parts for the template', () => {
+    test('computes the parts for the template', () => {
       const strings = htmlStrings`<div>${0}</div>`;
       const templateElement = buildTemplate(strings);
       const template = new Template(strings);
@@ -73,7 +73,7 @@ describe('templates', () => {
     [].map.call(documentFragment.childNodes, (node) => node.outerHTML).join('');
 
   describe('TemplateInstance', () => {
-    it('clones the template document fragment from the source Template', () => {
+    test('clones the template document fragment from the source Template', () => {
       const template = html`<div>${0}</div>`.template;
       const instance = new TemplateInstance(template);
       expect(fragmentString(template.element.content)).toEqual(
@@ -86,7 +86,7 @@ describe('templates', () => {
       );
     });
 
-    it('constructs Part instances according to the definitions from the Template', () => {
+    test('constructs Part instances according to the definitions from the Template', () => {
       const template = html`
         <div id="parent0">
           ${0}
@@ -132,7 +132,7 @@ describe('templates', () => {
       expect(instance.parts[8].node.parentNode.id).toEqual('node6');
     });
 
-    it('calls "render" on the parts with the correct values', () => {
+    test('calls "render" on the parts with the correct values', () => {
       const template = html`${3}${3}${3}`.template;
       const instance = new TemplateInstance(template);
       instance.parts.forEach(
