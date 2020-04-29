@@ -170,116 +170,98 @@ describe('templateParser', () => {
       );
       expect(
         parseTemplate(
-          html`<div a=${0} b=${0}>${0}${0}</div>
-            <!--${0}${0}-->`
+          html`<div a=${0} b=${0}>${0}${0}</div><!--${0}${0}-->`
         )
       ).toEqual(
         `<div a=${attributeMarkerTag} b=${attributeMarkerTag}>${nodeMarkerTag}${nodeMarkerTag}</div><!--${commentMarkerTag}${commentMarkerTag}-->`
       );
       expect(
         parseTemplate(
-          html`<div a=${0} b=${0}>${0}</div>
-            ${0}<!--${0}${0}-->`
+          html`<div a=${0} b=${0}>${0}</div>${0}<!--${0}${0}-->`
         )
       ).toEqual(
         `<div a=${attributeMarkerTag} b=${attributeMarkerTag}>${nodeMarkerTag}</div>${nodeMarkerTag}<!--${commentMarkerTag}${commentMarkerTag}-->`
       );
       expect(
         parseTemplate(
-          html`<div a=${0} b=${0}>${0}</div>
-            <!--${0}${0}-->${0}`
+          html`<div a=${0} b=${0}>${0}</div><!--${0}${0}-->${0}`
         )
       ).toEqual(
         `<div a=${attributeMarkerTag} b=${attributeMarkerTag}>${nodeMarkerTag}</div><!--${commentMarkerTag}${commentMarkerTag}-->${nodeMarkerTag}`
       );
       expect(
         parseTemplate(
-          html`<div a=${0} b=${0}></div>
-            <!--${0}${0}-->${0}${0}`
+          html`<div a=${0} b=${0}></div><!--${0}${0}-->${0}${0}`
         )
       ).toEqual(
         `<div a=${attributeMarkerTag} b=${attributeMarkerTag}></div><!--${commentMarkerTag}${commentMarkerTag}-->${nodeMarkerTag}${nodeMarkerTag}`
       );
       expect(
         parseTemplate(
-          html`<!--${0}${0}-->
-            <div a=${0} b=${0}>${0}${0}</div>`
+          html`<!--${0}${0}--><div a=${0} b=${0}>${0}${0}</div>`
         )
       ).toEqual(
         `<!--${commentMarkerTag}${commentMarkerTag}--><div a=${attributeMarkerTag} b=${attributeMarkerTag}>${nodeMarkerTag}${nodeMarkerTag}</div>`
       );
       expect(
         parseTemplate(
-          html`<!--${0}${0}-->
-            <div a=${0} b=${0}>${0}</div>
-            ${0}`
+          html`<!--${0}${0}--><div a=${0} b=${0}>${0}</div>${0}`
         )
       ).toEqual(
         `<!--${commentMarkerTag}${commentMarkerTag}--><div a=${attributeMarkerTag} b=${attributeMarkerTag}>${nodeMarkerTag}</div>${nodeMarkerTag}`
       );
       expect(
         parseTemplate(
-          html`<!--${0}${0}-->${0}
-            <div a=${0} b=${0}>${0}</div>`
+          html`<!--${0}${0}-->${0}<div a=${0} b=${0}>${0}</div>`
         )
       ).toEqual(
         `<!--${commentMarkerTag}${commentMarkerTag}-->${nodeMarkerTag}<div a=${attributeMarkerTag} b=${attributeMarkerTag}>${nodeMarkerTag}</div>`
       );
       expect(
         parseTemplate(
-          html`<!--${0}${0}-->
-            <div a=${0} b=${0}></div>
-            ${0}${0}`
+          html`<!--${0}${0}--><div a=${0} b=${0}></div>${0}${0}`
         )
       ).toEqual(
         `<!--${commentMarkerTag}${commentMarkerTag}--><div a=${attributeMarkerTag} b=${attributeMarkerTag}></div>${nodeMarkerTag}${nodeMarkerTag}`
       );
       expect(
         parseTemplate(
-          html`<!--${0}${0}-->${0}${0}
-            <div a=${0} b=${0}></div>`
+          html`<!--${0}${0}-->${0}${0}<div a=${0} b=${0}></div>`
         )
       ).toEqual(
         `<!--${commentMarkerTag}${commentMarkerTag}-->${nodeMarkerTag}${nodeMarkerTag}<div a=${attributeMarkerTag} b=${attributeMarkerTag}></div>`
       );
       expect(
         parseTemplate(
-          html`${0}${0}
-            <div a=${0} b=${0}><!--${0}${0}--></div>`
+          html`${0}${0}<div a=${0} b=${0}><!--${0}${0}--></div>`
         )
       ).toEqual(
         `${nodeMarkerTag}${nodeMarkerTag}<div a=${attributeMarkerTag} b=${attributeMarkerTag}><!--${commentMarkerTag}${commentMarkerTag}--></div>`
       );
       expect(
         parseTemplate(
-          html`${0}${0}
-            <div a=${0} b=${0}></div>
-            <!--${0}${0}-->`
+          html`${0}${0}<div a=${0} b=${0}></div><!--${0}${0}-->`
         )
       ).toEqual(
         `${nodeMarkerTag}${nodeMarkerTag}<div a=${attributeMarkerTag} b=${attributeMarkerTag}></div><!--${commentMarkerTag}${commentMarkerTag}-->`
       );
       expect(
         parseTemplate(
-          html`${0}
-            <div a=${0} b=${0}>${0}<!--${0}${0}--></div>`
+          html`${0}<div a=${0} b=${0}>${0}<!--${0}${0}--></div>`
         )
       ).toEqual(
         `${nodeMarkerTag}<div a=${attributeMarkerTag} b=${attributeMarkerTag}>${nodeMarkerTag}<!--${commentMarkerTag}${commentMarkerTag}--></div>`
       );
       expect(
         parseTemplate(
-          html`${0}
-            <div a=${0} b=${0}><!--${0}${0}-->${0}</div>`
+          html`${0}<div a=${0} b=${0}><!--${0}${0}-->${0}</div>`
         )
       ).toEqual(
         `${nodeMarkerTag}<div a=${attributeMarkerTag} b=${attributeMarkerTag}><!--${commentMarkerTag}${commentMarkerTag}-->${nodeMarkerTag}</div>`
       );
       expect(
         parseTemplate(
-          html`${0}
-            <div a=${0} b=${0}><!--${0}${0}--></div>
-            ${0}`
+          html`${0}<div a=${0} b=${0}><!--${0}${0}--></div>${0}`
         )
       ).toEqual(
         `${nodeMarkerTag}<div a=${attributeMarkerTag} b=${attributeMarkerTag}><!--${commentMarkerTag}${commentMarkerTag}--></div>${nodeMarkerTag}`

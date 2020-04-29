@@ -10,4 +10,4 @@ package-lock.json
 yarn.lock
 
 # Tests
-__tests__/parser/template-parser.js
+tests/parser/template-parser.test.js
