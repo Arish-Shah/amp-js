@@ -7,6 +7,13 @@ import {
 } from '../util/index.js';
 
 /**
+ *
+ * @typedef {Object} Component
+ * @property {string} id
+ * @property {Function} generate
+ */
+
+/**
  * Create custom reusable components for usage in HTML
  * @param {string} id
  *   Name of the component.
@@ -22,8 +29,7 @@ import {
  * @param {Array<Component>} definition.components
  * @param {Array<string>} definition.props
  * @param {TemplateResult} definition.template
- * @returns {{id, Function}}
- *   id of the components alongwith a function to generate it
+ * @returns {Component}
  */
 export const component = (id, definition) => {
   const generate = (nodes) => {
