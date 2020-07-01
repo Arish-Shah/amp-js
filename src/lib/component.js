@@ -21,13 +21,15 @@ import {
  * @param {Object} definition
  *   Definition of the component.
  *   This includes template, data, methods and props (if any)
- * @param {Function} definition.oncreate
- * @param {Function} definition.onmount
- * @param {Function} definition.onupdate
- * @param {Object} definition.data
- * @param {Object} definition.methods
- * @param {Array<Component>} definition.components
- * @param {Array<string>} definition.props
+ * @param {Function=} definition.oncreate
+ * @param {Function=} definition.onmount
+ * @param {Function=} definition.onupdate
+ * @param {Object=} definition.data
+ * @param {Object=} definition.methods
+ * @param {Object=} definition.components
+ * @param {String} definition.components.name
+ * @param {String} definition.components.definition
+ * @param {Array<string>=} definition.props
  * @param {TemplateResult} definition.template
  * @returns {Component}
  */
@@ -68,11 +70,11 @@ export const component = (id, definition) => {
 
       /*  On re-render update children */
       const updateChildren = (components) => {
-        if (components && components.length > 0) {
-          components.forEach((comp) => {
-            const isInDOM = document.querySelectorAll(comp.id).length > 0;
+        if (components && Object.keys(components).length > 0) {
+          Object.keys(components).forEach((compId) => {
+            const isInDOM = document.querySelectorAll(compId).length > 0;
             if (isInDOM) {
-              comp.generate();
+              components[compId].generate();
             }
           });
         }
@@ -103,7 +105,7 @@ export const component = (id, definition) => {
         }
       }
 
-      /* Set the props to state.props variable */
+      /* Set the props to state.props variables */
       state.props = getProps(props, node);
 
       let lifeCycle = {};
